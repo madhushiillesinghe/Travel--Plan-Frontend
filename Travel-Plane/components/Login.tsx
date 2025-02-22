@@ -1,10 +1,14 @@
-import { View, Image, Text, StyleSheet } from "react-native";
+// components/Login.tsx
+import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/Colors"; // Adjust path for constants if needed
+import { useRouter } from "expo-router";
 
 export default function Login() {
+    const router = useRouter();
+
     return (
-        <View>
+        <View style={styles.mainContainer}>
             <Image
                 source={require("../assets/images/Login.jpg")}
                 style={styles.image}
@@ -14,15 +18,22 @@ export default function Login() {
                 <Text style={styles.subtitle}>
                     Explore the world effortlessly with AI-powered recommendations tailored just for you.
                 </Text>
-                <View style={styles.button}>
-                    <Text style={styles.buttonText}>SIGN IN with Google</Text>
-                </View>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => router.push("/auth/sign-in")} // Ensure relative path is correct
+                >
+                    <Text style={styles.buttonText}>Get Started</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        backgroundColor: Colors.WHITE,
+    },
     image: {
         width: "100%",
         height: 520,
@@ -34,6 +45,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 40,
         padding: 25,
         height: "100%",
+        alignItems: "center",
     },
     title: {
         fontSize: 30,
@@ -49,7 +61,8 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     button: {
-        padding: 15,
+        paddingVertical: 15,
+        paddingHorizontal: 30,
         backgroundColor: Colors.PRIMARY,
         borderRadius: 99,
         marginTop: "20%",
