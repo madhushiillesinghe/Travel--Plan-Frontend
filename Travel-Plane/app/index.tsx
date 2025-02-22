@@ -1,4 +1,5 @@
 import { Text, View } from "react-native";
+import Login from "@/components/Login";
 
 export default function Index() {
   return (
@@ -7,7 +8,7 @@ export default function Index() {
         flex: 1,
       }}
     >
-      <Text style={{}}>Hello Travel plan app</Text>
+        <Login />
     </View>
   );
 }
