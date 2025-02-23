@@ -27,6 +27,7 @@ export default function SignUp(): JSX.Element {
         try {
             const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
+            router.replace("/mytrip")
             console.log("User Created:", user);
         } catch (error: unknown) {
             if (error instanceof Error) {
