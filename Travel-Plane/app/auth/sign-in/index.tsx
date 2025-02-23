@@ -26,6 +26,7 @@ export default function SignIn(): JSX.Element {
         try {
             const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
+            router.replace("/mytrip")
             console.log("Signed in user:", user);
         } catch (error: any) {
             if (error.code === "auth/invalid-credential") {
