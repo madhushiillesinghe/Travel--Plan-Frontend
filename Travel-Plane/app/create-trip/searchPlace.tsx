@@ -1,12 +1,26 @@
-import {View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Linking} from "react-native";
-import React, { useState } from "react";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Linking } from "react-native";
+import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import { Colors } from "@/constants/Colors";
-import { CreateTripContext } from "@/context/CreateTripContext"; // Assuming this import is valid
+import {CreateTripContext} from "@/context/CreateTripContext";
+import {useNavigation} from "expo-router";
 
 export default function SearchPlace() {
     const [searchQuery, setSearchQuery] = useState("");
     const [places, setPlaces] = useState<any[]>([]);
+    const tripContext = useContext<any>(CreateTripContext);
+    const { tripData, setTripData } = tripContext;
+    const navigation = useNavigation();
+    useEffect(() => {
+        navigation.setOptions({
+            headerShown: false,
+            headerTransparent: true,
+            headerTitle:"Search Place",
+            });
+    }, []);
+    useEffect(() => {
+        console.log(tripData);
+    }, [tripData]);
 
     const searchPlaces = async (query: string) => {
         if (query.length > 2) { // Trigger search only after 2 characters entered
@@ -17,7 +31,7 @@ export default function SearchPlace() {
                         key: "295942c2b46c42f4bdbafc9178705e05",  // Your OpenCage API key
                         format: "json",
                         addressdetails: 1,
-                        limit: 5,  // Limits to 5 results
+                        limit: 5,  // Limit to 5 results
                     },
                     headers: {
                         "User-Agent": "Travel-Plane (chandu@gmail.com)",  // Add your app name and email
@@ -40,8 +54,15 @@ export default function SearchPlace() {
         // Log the required data to the console
         console.log("Location Name:", formatted);
         console.log("Detail URL:", detailUrl);
-        console.log("Geometry Location:", `Latitude: ${geometry.lat}, Longitude: ${geometry.lng}`);
-
+        console.log(`Geometry Location: Latitude: ${geometry.lat}, Longitude: ${geometry.lng}`);
+        setTripData({
+            locationInfo:{
+                name:formatted,
+                coordinates_latitude:(geometry.lat),
+                coordinates_longitude:(geometry.lng),
+                url:detailUrl,
+            }
+        })
         setSearchQuery(formatted); // Set the search query to the selected location
         setPlaces([]); // Optionally clear the results once a location is selected
     };
@@ -71,15 +92,26 @@ export default function SearchPlace() {
                             onPress={() => handleLocationSelect(place)}
                         >
                             <Text style={styles.locationName}>{place.formatted}</Text>
-                            <Text>Detail URL: <Text style={styles.link} onPress={() => { Linking.openURL(`https://www.openstreetmap.org/?lat=${place.geometry.lat}&lon=${place.geometry.lng}`); }}>View on OpenStreetMap</Text></Text>
+                            <Text>
+                                Detail URL:{" "}
+                                <Text
+                                    style={styles.link}
+                                    onPress={() => {
+                                        Linking.openURL(`https://www.openstreetmap.org/?lat=${place.geometry.lat}&lon=${place.geometry.lng}`);
+                                    }}
+                                >
+                                    View on OpenStreetMap
+                                </Text>
+                            </Text>
                             <Text>Latitude: {place.geometry.lat}</Text>
                             <Text>Longitude: {place.geometry.lng}</Text>
-                            {place.components && place.components.country && (
+
+                            {place.components?.country && (
                                 <Text>Country: {place.components.country}</Text>
                             )}
 
                             {/* Displaying Image if available */}
-                            {place.image && place.image.thumbnail && (
+                            {place.image?.thumbnail && (
                                 <Image
                                     source={{ uri: place.image.thumbnail }}
                                     style={styles.image}
@@ -120,7 +152,7 @@ const styles = StyleSheet.create({
         borderBottomColor: Colors.GRAY,
     },
     locationName: {
-        fontWeight: 'bold',
+        fontWeight: "bold",
         fontSize: 16,
     },
     link: {
@@ -134,3 +166,4 @@ const styles = StyleSheet.create({
         resizeMode: "cover",
     },
 });
+
