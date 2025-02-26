@@ -3,7 +3,8 @@ import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import { Colors } from "@/constants/Colors";
 import {CreateTripContext} from "@/context/CreateTripContext";
-import {useNavigation} from "expo-router";
+import {router, useNavigation} from "expo-router";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function SearchPlace() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -15,7 +16,7 @@ export default function SearchPlace() {
         navigation.setOptions({
             headerShown: false,
             headerTransparent: true,
-            headerTitle:"Search Place",
+            headerTitle:"Search ",
             });
     }, []);
     useEffect(() => {
@@ -69,6 +70,9 @@ export default function SearchPlace() {
 
     return (
         <View style={styles.container}>
+            <TouchableOpacity onPress={() => router.back()}>
+                <Ionicons name="arrow-back" size={24} color="black" />
+            </TouchableOpacity>
             <Text style={styles.title}>Search Places</Text>
 
             {/* TextInput for Search */}
@@ -128,7 +132,7 @@ export default function SearchPlace() {
 const styles = StyleSheet.create({
     container: {
         padding: 25,
-        paddingTop: 75,
+        paddingTop: 25,
         backgroundColor: Colors.WHITE,
         height: "100%",
     },
@@ -142,6 +146,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 20,
         paddingLeft: 10,
+        borderRadius: 8,
+        marginTop:30
     },
     resultsContainer: {
         marginTop: 20,
