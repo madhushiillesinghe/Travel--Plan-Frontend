@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import { Colors } from "@/constants/Colors";
 import {CreateTripContext} from "@/context/CreateTripContext";
-import {router, useNavigation} from "expo-router";
+import {router, useNavigation, useRouter} from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function SearchPlace() {
@@ -12,6 +12,7 @@ export default function SearchPlace() {
     const tripContext = useContext<any>(CreateTripContext);
     const { tripData, setTripData } = tripContext;
     const navigation = useNavigation();
+    const router = useRouter();
     useEffect(() => {
         navigation.setOptions({
             headerShown: false,
@@ -64,6 +65,7 @@ export default function SearchPlace() {
                 url:detailUrl,
             }
         })
+        router.push("/create-trip/selectTravaler")
         setSearchQuery(formatted); // Set the search query to the selected location
         setPlaces([]); // Optionally clear the results once a location is selected
     };
