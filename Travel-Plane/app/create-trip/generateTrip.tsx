@@ -7,6 +7,7 @@ import { chatSession } from "@/configs/AiModel";
 import { AI_PROMPT } from "@/constants/Options";
 import { doc, setDoc } from "@firebase/firestore";
 import { db, auth } from "@/configs/FirebaseConfig";
+import moment from "moment"; // Import moment.js
 
 export default function GenerateTrip() {
     const navigation = useNavigation();
@@ -39,14 +40,24 @@ export default function GenerateTrip() {
             const result = await chatSession.sendMessage(FINAL_PROMPT);
             if (typeof result?.response?.text === 'function') {
                 console.log("AI Response Function:", result?.response?.text());
-                const tripResp = (result?.response?.text());
+                const tripResp = result?.response?.text();
+                console.log(JSON.stringify(tripResp),"generated");
                 setLoading(false);
+
+                // Convert any Moment objects in tripDetails to Date objects
+                if (tripData?.startDate) {
+                    tripData.startDate = moment(tripData.startDate).toDate(); // Convert to Date
+                }
+                if (tripData?.endDate) {
+                    tripData.endDate = moment(tripData.endDate).toDate(); // Convert to Date
+                }
 
                 const docId = Date.now().toString();
                 // Automatically creates the collection "UserTrips" and the document
                 await setDoc(doc(db, "UserTrips", docId), {
                     userEmail: user?.email,
-                    tripData: tripResp,
+                    tripData: tripResp, // AI result
+                    tripDetails: tripData // user Result with dates converted
                 });
                 console.log("Trip saved to Firestore:", docId);
 
