@@ -1,16 +1,20 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { CreateTripContext } from "@/context/CreateTripContext";
 import { Colors } from "@/constants/Colors";
 import { chatSession } from "@/configs/AiModel";
-import {AI_PROMPT} from "@/constants/Options";  // import the chatSession function
+import { AI_PROMPT } from "@/constants/Options";
+import { doc, setDoc } from "@firebase/firestore";
+import { db, auth } from "@/configs/FirebaseConfig";
 
 export default function GenerateTrip() {
     const navigation = useNavigation();
     const [loading, setLoading] = useState(false);
     const [tripDetails, setTripDetails] = useState<any>(null);  // Store trip details response
     const { tripData, setTripData } = useContext(CreateTripContext);
+    const router = useRouter();
+    const user = auth.currentUser;
 
     useEffect(() => {
         if (tripData) {
@@ -32,17 +36,26 @@ export default function GenerateTrip() {
             .replace("{totalNight}", String(nightDate));
 
         try {
-            // Send the prompt to the AI and await the response
             const result = await chatSession.sendMessage(FINAL_PROMPT);
-
-            // If response.text is a function, check its actual value
             if (typeof result?.response?.text === 'function') {
                 console.log("AI Response Function:", result?.response?.text());
+                const tripResp = (result?.response?.text());
+                setLoading(false);
+
+                const docId = Date.now().toString();
+                // Automatically creates the collection "UserTrips" and the document
+                await setDoc(doc(db, "UserTrips", docId), {
+                    userEmail: user?.email,
+                    tripData: tripResp,
+                });
+                console.log("Trip saved to Firestore:", docId);
+
+                // Redirect user after saving trip
+                router.push("/(tabs)/mytrip");
+
             } else {
                 console.log("AI Response Text:", result?.response?.text);  // Log the response text directly
             }
-
-            setTripDetails(result?.response?.text);  // Update the state with the response text
         } catch (error) {
             console.error("Error generating trip:", error);
         } finally {
@@ -60,19 +73,10 @@ export default function GenerateTrip() {
 
     return (
         <View style={styles.container}>
-            {loading ? (
-                <>
-                    <Text style={styles.text}>Please Wait....</Text>
-                    <Text style={styles.subtext}>We are working to generate your dream trip</Text>
-                    <Image style={styles.image} source={require("../../assets/images/Travel Airplane Sticker by Aerial.gif")} />
-                    <Text style={{ fontFamily: "outfit", color: Colors.GRAY, fontSize: 20, textAlign: "center", paddingTop: 20 }}>Do not go Back</Text>
-                </>
-            ) : (
-                <View>
-                    <Text style={styles.text}>Generated Trip Details</Text>
-                    <Text style={styles.subtext}>{tripDetails}</Text>
-                </View>
-            )}
+            <Text style={styles.text}>Please Wait....</Text>
+            <Text style={styles.subtext}>We are working to generate your dream trip</Text>
+            <Image style={styles.image} source={require("../../assets/images/Travel Airplane Sticker by Aerial.gif")} />
+            <Text style={{ fontFamily: "outfit", color: Colors.GRAY, fontSize: 20, textAlign: "center", paddingTop: 20 }}>Do not go Back</Text>
         </View>
     );
 }
@@ -99,5 +103,5 @@ const styles = StyleSheet.create({
         height: 150,
         objectFit: "contain",
         width: "120%",
-    }
+    },
 });
