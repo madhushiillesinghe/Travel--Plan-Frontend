@@ -25,3 +25,4 @@ export const SelectTravelesList=[
         pepole: "5 to 10 People"
     }
 ]
+export const AI_PROMPT="Generate Travel Plan for Location :{location} ,for {totalDays} Days and {totalNight} Night for {traveler} with a {budget} budget with a Flight details, Flight Price with Booking url,Hotels options list with HotelName,Hotel address,Hotel nearby with placeName,Place Details,Place Image Url,Geo Coordinates,ticket Pricing ,Time to travel each of the location for {totalDays} days and {totalNight} night with each day plan with best time to visit in JSON format"
