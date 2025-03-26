@@ -1,50 +1,63 @@
-# Welcome to your Expo app 👋
+# AI Travel Plan App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+AI Travel Plan is a React Native application built with TypeScript that helps users generate AI-based travel plans. It uses Firebase for authentication and data storage and integrates OpenCage API for location search. The app features tab navigation with Discover, Profile, and My Trip sections.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **User Authentication**: Firebase Authentication for login and registration.
+- **Data Storage**: Firestore Database for storing user data and trip details.
+- **Tab Navigation**: Includes Discover, Profile, and My Trip sections.
+- **Trip Planning**:
+   - Search and select a location using [OpenCage API](https://api.opencagedata.com/geocode/v1/json).
+   - Choose travel members (e.g., Family, Just Me).
+   - Select a date range for the trip.
+   - Set a budget for the trip.
+   - Review and generate an AI-based trip plan.
+   - Display recommended hotels and flight details.
+- **Discover Section**:
+   - Displays popular places to visit.
+   - Fetches data using an API key.
+- **Reusable Components**: Modular UI components for a seamless experience.
+- **Toast Messages**: User-friendly notifications for actions and errors.
+- **Context API**: Manages app state efficiently.
 
-   ```bash
-   npm install
-   ```
+## Installation
 
-2. Start the app
+### Prerequisites
+- Node.js installed
+- Expo CLI installed
+- Firebase project set up with API keys
 
-   ```bash
-    npx expo start
-   ```
 
-In the output, you'll find options to open the app in a
+## Usage
+- **Login/Register**: Users must sign in or register.
+- **Plan a Trip**:
+   - Select a location using OpenCage API.
+   - Choose travel members and set a budget.
+   - Select a date range for the trip.
+   - AI generates a personalized trip plan.
+   - View hotels and flight details.
+- **Discover Section**:
+   - Browse popular destinations.
+   - View recommended places to visit using an API key.
+- **Profile Section**: Manage user details and past trips.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Screenshots
+View app screenshots here: [Google Drive Folder](https://drive.google.com/drive/folders/1gJwRFjNp4Q3nnvarf7_baNu9uBSZGcO0)
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Technologies Used
+- React Native
+- TypeScript
+- Firebase Authentication & Firestore
+- OpenCage API
+- Context API
+- Expo Go
 
-## Get a fresh project
+## License
+This project is licensed under the MIT License.
 
-When you're ready, run:
+---
+Feel free to contribute or report any issues!
 
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Author
+[Madhushi Hansika Illesinghe](https://github.com/madhushiillesinghe)
